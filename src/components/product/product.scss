@@ -1,0 +1,167 @@
+@import "../../resources/colors/colors.css";
+
+.product {
+	&__body {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		height: 100%;
+
+		.pictures {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			.current {
+				display: inline-block;
+				margin: 20px;
+				border-radius: 10px;
+
+				img {
+					background-color: #f6f5f7;
+					height: 433px;
+					width: 577px;
+				}
+			}
+
+			&__sides {
+				display: flex;
+				gap: 15px;
+
+				.selected {
+					border-radius: 100%;
+					border-color: blue;
+				}
+
+				button {
+					border: 1px solid #fff;
+					background: none;
+					padding: 0;
+					cursor: pointer;
+
+					&:focus,
+					&:hover {
+						outline: none;
+					}
+
+					img {
+						border: 0.5px solid #dcdbdb;
+						border-radius: 100%;
+						width: 75px;
+						transition: border-color 0.3s ease;
+					}
+				}
+			}
+		}
+
+		.info {
+			padding: 20px;
+			box-sizing: border-box;
+
+			h5 {
+				margin: 5px 0;
+				font-size: 12px;
+			}
+
+			.underline {
+				border-bottom: 3px solid #000;
+				margin: 60px 0;
+
+				h1 {
+					font-size: 50px;
+					font-weight: 700;
+					margin-bottom: 40px;
+				}
+
+				.price {
+					font-size: 20px;
+					font-weight: 400;
+				}
+
+				.choose-color {
+					font-size: 32px;
+					font-weight: 600;
+					margin-bottom: 20px;
+				}
+
+				.colors {
+					display: grid;
+					grid-template-columns: repeat(3, 0.5fr);
+
+					.color {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						justify-content: center;
+						border: 1px solid #dcdbdb;
+						border-radius: 10px;
+						padding: 30px;
+						margin: 10px 10px 10px 0;
+						transition: border-color 0.3s ease;
+
+						&.selected {
+							border-color: blue;
+						}
+
+						span {
+							display: block;
+							width: 30px;
+							height: 30px;
+							border-radius: 100%;
+							border: 0.5px solid #9c9c9c;
+							margin-bottom: 10px;
+						}
+					}
+				}
+
+				h3 {
+					font-size: 32px;
+					font-weight: 600;
+					margin-bottom: 20px;
+				}
+
+				.storage-space {
+					display: inline-block;
+					border: 1px solid #dcdbdb;
+					border-radius: 10px;
+					padding: 30px;
+					margin: 30px 10px 30px 0;
+					font-size: 20px;
+					font-weight: 400;
+
+					&.selected {
+						border-color: blue;
+					}
+				}
+			}
+
+			.buy-wrapper {
+				display: inline-block;
+				border-radius: 10px;
+				background-color: #dcdbdb;
+				padding: 20px 20px;
+
+				.price {
+					font-weight: 400;
+					font-size: 20px;
+				}
+
+				a {
+					display: flex;
+					justify-content: center;
+					border-radius: 10px;
+					font-size: xx-large;
+					padding: 10px 0;
+					margin-top: 40px;
+					background-color: rgb(156, 156, 156);
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 769px) {
+	.product__body {
+		flex-direction: row;
+	}
+}
