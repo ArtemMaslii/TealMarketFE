@@ -2,7 +2,7 @@ import { useState, useRef, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItem } from "reducer/cartSlice";
 import { IoIosArrowRoundBack } from "react-icons/io";
-import { IoIosArrowDown } from "react-icons/io";
+import { Helmet } from "react-helmet";
 import { FaCcVisa } from "react-icons/fa";
 import { FaCcMastercard } from "react-icons/fa";
 
@@ -68,6 +68,10 @@ const Cart = () => {
 
 	return (
 		<>
+		<Helmet>
+			<title>Cart</title>
+			<meta name='description' content='Cart page with products to purchase'/>
+		</Helmet>
 			<div className="cart">
 				<a href="/">
 					<IoIosArrowRoundBack size="70px" className="back" />

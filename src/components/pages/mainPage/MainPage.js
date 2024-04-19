@@ -33,10 +33,15 @@
 //   export default MainPage;
 
 import Banner from 'components/banner/Banner';
+import { Helmet } from 'react-helmet';
 
 const MainPage = () => {
 	return (
 		<>
+		<Helmet>
+			<title>Home</title>
+			<meta name='description' content='Home page with banners of Iphone 15 Pro, Galaxy S24 Ultra, and Pixel 8 Pro'/>
+		</Helmet>
 			<Banner
 				deviceType='samsung'
 				img='https://images-bucket-teal-market.s3.eu-north-1.amazonaws.com/MainPage/MainPageGalaxy.jpg'

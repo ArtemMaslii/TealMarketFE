@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import "./phoneModels.scss";
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 
 const PhoneModels = ({ nav, models }) => {
 	const { companyName } = useParams();
@@ -21,6 +22,10 @@ const PhoneModels = ({ nav, models }) => {
 
 	return (
 		<div className="models__body">
+			<Helmet>
+				<title>Company page with products</title>
+				<meta name="description" content="Page with navigation between models and all models to buy" />
+			</Helmet>
 			<div className="nav">
 				{nav.map((model) => (
 					<div className="item" key={model.name}>
