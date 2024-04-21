@@ -1,55 +1,34 @@
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import "./phoneModels.scss";
-import { useState } from "react";
-import { Helmet } from "react-helmet";
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import './phoneModels.scss';
+import { Helmet } from 'react-helmet';
+import { generateImg } from 'service/generateImages';
 
-const PhoneModels = ({ nav, models }) => {
+const PhoneModels = ({ models }) => {
 	const { companyName } = useParams();
-	const [filteredModels, setFilteredModels] = useState(models);
-	const [activeFilter, setActiveFilter] = useState(null);
-
-	const handleNavItemClick = (itemName) => {
-		if (activeFilter === itemName) {
-			setFilteredModels(models);
-			setActiveFilter(null);
-		} else {
-			const filtered = models.filter((model) => model.name.includes(itemName));
-			setFilteredModels(filtered);
-			setActiveFilter(itemName);
-		}
-	};
 
 	return (
-		<div className="models__body">
+		<div className='models__body'>
 			<Helmet>
 				<title>Company page with products</title>
-				<meta name="description" content="Page with navigation between models and all models to buy" />
+				<meta name='description' content='Page with navigation between models and all models to buy' />
 			</Helmet>
-			<div className="nav">
-				{nav.map((model) => (
-					<div className="item" key={model.name}>
-						<img src={model.img} alt={model.name} onClick={() => handleNavItemClick(model.name)} />
-						<h4>{model.name}</h4>
-					</div>
-				))}
-			</div>
-			<div className="products">
-				{filteredModels.map((model) => (
-					<div className="products__container" key={model.name}>
-						<img src={model.generateImageUrls(model.colors[0])[0]} alt={model.name} />{" "}
-						<div className="description">
-							<div className="main">
+			<div className='products'>
+				{models.map((model) => (
+					<div className='products__container' key={model.name}>
+						<img src={generateImg(model.name, model.colors[0].name)} alt={model.name} />{' '}
+						<div className='description'>
+							<div className='main'>
 								<h1>{model.name}</h1>
-								<div className="colors">
+								<div className='colors'>
 									{model.colors.map((color) => (
-										<span key={color} className={color}></span>
+										<span key={color.name} className={color.name}></span>
 									))}
 								</div>
 							</div>
-							<div className="wrapper">
+							<div className='wrapper'>
 								<h3>From {model.price}$</h3>
-								<Link to={`/shop/${companyName}/${model.name.replace(/\s+/g, "").toLowerCase()}`}>Buy</Link>
+								<Link to={`/shop/${companyName}/${model.id.toString()}`}>Buy</Link>
 							</div>
 						</div>
 					</div>

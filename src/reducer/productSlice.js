@@ -1,48 +1,67 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import { generateImgs } from 'service/generateImages';
+import { fetchModel } from 'actions/shopActions';
 
 const initialState = {
+	product: {},
+	loading: false,
+	error: null,
 	financingPeriod: 36,
-	selectedColor: "",
-	selectedStorage: "",
-	currentImage: "",
+	selectedColor: '',
+	selectedStorage: '',
+	currentImage: '',
 	images: [],
-	price: 0,
-	productDetails: {},
 };
 
 export const productSlice = createSlice({
-	name: "product",
+	name: 'product',
 	initialState: initialState,
 	reducers: {
 		initializeProduct: (state, action) => {
-			const { product, price } = action.payload;
-			state.productDetails = product;
-			state.selectedColor = product.colors[0];
-			state.selectedStorage = product.storageSpaces[0];
-			state.price = price;
-			state.images = product.generateImageUrls(product.colors[0]);
+			const product = action.payload;
+			state.selectedColor = product.colors[0].name;
+			state.selectedStorage = product.storages[0].capacity;
+			state.price = product.price;
+			state.images = generateImgs(product.name, product.colors[0]);
 			state.currentImage = state.images[0];
 		},
 		setColor: (state, action) => {
 			const { color } = action.payload;
 			state.selectedColor = color;
-			if (state.productDetails.colors.includes(color)) {
-				state.images = state.productDetails.generateImageUrls(color);
+			const colorData = state.product.colors.find((c) => c.name === color);
+			if (colorData) {
+				state.images = generateImgs(state.product.name, colorData);
 				state.currentImage = state.images[0];
 			}
 		},
 		setStorage: (state, action) => {
 			const { storage } = action.payload;
+			const currentIndex = state.product.storages.findIndex((s) => s.capacity === storage);
+			const previousIndex = state.product.storages.findIndex((s) => s.capacity === state.selectedStorage);
 			state.selectedStorage = storage;
-			const index = state.productDetails.storageSpaces.indexOf(storage);
-			if (index !== -1) {
-				state.price = state.productDetails.price + index * 100;
+			if (currentIndex !== -1 && previousIndex !== -1) {
+				const priceDifference = (currentIndex - previousIndex) * 100;
+				state.product.price += priceDifference;
 			}
 		},
 		setImage: (state, action) => {
 			const { image } = action.payload;
 			state.currentImage = image;
 		},
+	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(fetchModel.pending, (state) => {
+				state.loading = true;
+			})
+			.addCase(fetchModel.fulfilled, (state, action) => {
+				state.loading = false;
+				state.product = action.payload;
+			})
+			.addCase(fetchModel.rejected, (state, action) => {
+				state.loading = false;
+				state.error = action.payload;
+			});
 	},
 });
 

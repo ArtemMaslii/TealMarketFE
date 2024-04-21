@@ -1,18 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const fetchFilters = createAsyncThunk('shop/fetchFilters', async (companyName, { rejectWithValue }) => {
+export const fetchModels = createAsyncThunk('shop/fetchModels', async (companyName, { rejectWithValue }) => {
 	try {
-		const response = await fetch(`localhost:8080/api/v1/filters/${companyName}`);
-		if (!response.ok) throw new Error('Failed to fetch filters');
+		const response = await fetch(`http://localhost:8080/api/v1/product/${companyName}`);
+		if (!response.ok) throw new Error('Failed to fetch models');
 		return await response.json();
 	} catch (error) {
 		return rejectWithValue(error.message);
 	}
 });
 
-export const fetchModels = createAsyncThunk('shop/fetchModels', async (companyName, { rejectWithValue }) => {
+export const fetchModel = createAsyncThunk('shop/fetchModel', async ({ companyName, id }, { rejectWithValue }) => {
 	try {
-		const response = await fetch(`http://localhost:8080/api/v1/product/${companyName}`);
+		const response = await fetch(`http://localhost:8080/api/v1/product/${companyName}/${id}`);
 		if (!response.ok) throw new Error('Failed to fetch models');
 		return await response.json();
 	} catch (error) {

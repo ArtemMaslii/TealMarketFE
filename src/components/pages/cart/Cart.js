@@ -1,26 +1,26 @@
-import { useState, useRef, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { removeItem } from "reducer/cartSlice";
-import { IoIosArrowRoundBack } from "react-icons/io";
-import { Helmet } from "react-helmet";
-import { FaCcVisa } from "react-icons/fa";
-import { FaCcMastercard } from "react-icons/fa";
+import { useState, useRef, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItem } from 'reducer/cartSlice';
+import { IoIosArrowRoundBack } from 'react-icons/io';
+import { Helmet } from 'react-helmet';
+import { FaCcVisa } from 'react-icons/fa';
+import { FaCcMastercard } from 'react-icons/fa';
 
-import "./cart.scss";
-import SubmitButton from "components/submitButton/SubmitButton";
-import InputForm from "components/form/InputForm";
+import './cart.scss';
+import SubmitButton from 'components/submitButton/SubmitButton';
+import InputForm from 'components/form/InputForm';
 
 const Cart = () => {
-	const [sortCriteria, setSortCriteria] = useState("price");
+	const [sortCriteria, setSortCriteria] = useState('price');
 	const cartItems = useSelector((state) => state.cart.items);
 	const dispatch = useDispatch();
 	const [showModal, setShowModal] = useState(false);
 	const [card, setCard] = useState({
-		holderName: "",
-		cardNumber: "",
-		month: "",
-		year: "",
-		cvv: "",
+		holderName: '',
+		cardNumber: '',
+		month: '',
+		year: '',
+		cvv: '',
 	});
 	const yearInputRef = useRef(null);
 
@@ -28,9 +28,9 @@ const Cart = () => {
 
 	const sortedCartItems = useMemo(() => {
 		return [...cartItems].sort((a, b) => {
-			if (sortCriteria === "price") {
+			if (sortCriteria === 'price') {
 				return b.price - a.price;
-			} else if (sortCriteria === "name") {
+			} else if (sortCriteria === 'name') {
 				return a.name.localeCompare(b.name);
 			}
 			return 0;
@@ -39,17 +39,17 @@ const Cart = () => {
 
 	const handleInputChange = (e) => {
 		const { name, value: rawValue } = e.target;
-		let value = rawValue.replace(/\D/g, "");
+		let value = rawValue.replace(/\D/g, '');
 
-		if (name === "cardNumber") {
-			value = value.replace(/(\d{4})(?=\d)/g, "$1 ").trimEnd();
-		} else if (["month", "year", "cvv"].includes(name)) {
-			value = value.slice(0, name === "cvv" ? 3 : 2);
+		if (name === 'cardNumber') {
+			value = value.replace(/(\d{4})(?=\d)/g, '$1 ').trimEnd();
+		} else if (['month', 'year', 'cvv'].includes(name)) {
+			value = value.slice(0, name === 'cvv' ? 3 : 2);
 		}
 
 		setCard((prevCard) => ({ ...prevCard, [name]: value }));
 
-		if (name === "month" && value.length === 2) {
+		if (name === 'month' && value.length === 2) {
 			yearInputRef.current && yearInputRef.current.focus();
 		}
 	};
@@ -68,28 +68,28 @@ const Cart = () => {
 
 	return (
 		<>
-		<Helmet>
-			<title>Cart</title>
-			<meta name='description' content='Cart page with products to purchase'/>
-		</Helmet>
-			<div className="cart">
-				<a href="/">
-					<IoIosArrowRoundBack size="70px" className="back" />
+			<Helmet>
+				<title>Cart</title>
+				<meta name='description' content='Cart page with products to purchase' />
+			</Helmet>
+			<div className='cart'>
+				<a href='/'>
+					<IoIosArrowRoundBack size='70px' className='back' />
 				</a>
 				<h1>Shopping Cart</h1>
-				<div className="cart__info">
+				<div className='cart__info'>
 					<h2>You have {cartItems.length} items in cart</h2>
-					<div className="sort-by">
+					<div className='sort-by'>
 						Sort by:
 						<select value={sortCriteria} onChange={handleSortChange}>
-							<option value="price">Price</option>
-							<option value="name">Name</option>
+							<option value='price'>Price</option>
+							<option value='name'>Name</option>
 						</select>
 					</div>
 				</div>
-				<div className="cart__items">
+				<div className='cart__items'>
 					{sortedCartItems.map((item, index) => (
-						<div className="item" key={index}>
+						<div className='item' key={index}>
 							<img src={item.img} alt={item.name} />
 							<h4>{item.name}</h4>
 							<h5>
@@ -100,77 +100,77 @@ const Cart = () => {
 						</div>
 					))}
 				</div>
-				<div className="cart__card">
+				<div className='cart__card'>
 					<h2>Card details</h2>
-					<div className="payment">
-						<div className="card-info">
+					<div className='payment'>
+						<div className='card-info'>
 							<h4>Card type</h4>
-							<div className="types">
+							<div className='types'>
 								<button>
-									<FaCcVisa size="50px" />
+									<FaCcVisa size='50px' />
 								</button>
 								<button>
-									<FaCcMastercard size="50px" />
+									<FaCcMastercard size='50px' />
 								</button>
 							</div>
-							<label htmlFor="holderName">
+							<label htmlFor='holderName'>
 								Cardholder's name
-								<input type="text" name="holderName" className="cardholder" placeholder="John Smith" />
+								<input type='text' name='holderName' className='cardholder' placeholder='John Smith' />
 							</label>
-							<div className="wrapper">
-								<label htmlFor="cardNumber" className="card-number">
+							<div className='wrapper'>
+								<label htmlFor='cardNumber' className='card-number'>
 									Card number
 									<input
-										type="tel"
-										name="cardNumber"
-										inputMode="numeric"
-										maxLength="19"
-										placeholder="xxxx xxxx xxxx xxxx"
+										type='tel'
+										name='cardNumber'
+										inputMode='numeric'
+										maxLength='19'
+										placeholder='xxxx xxxx xxxx xxxx'
 										value={card.cardNumber}
 										onChange={handleInputChange}
 									/>
 								</label>
-								<label htmlFor="expireDate" className="expire-date">
+								<label htmlFor='expireDate' className='expire-date'>
 									Expire
-									<div className="exp-wrapper">
+									<div className='exp-wrapper'>
 										<input
-											type="text"
-											name="month"
-											inputMode="numeric"
-											placeholder="MM"
-											maxLength="2"
-											className="exp"
+											type='text'
+											name='month'
+											inputMode='numeric'
+											placeholder='MM'
+											maxLength='2'
+											className='exp'
 											value={card.month}
 											onChange={handleInputChange}
 										/>
 										<input
-											type="text"
-											name="year"
-											inputMode="numeric"
-											placeholder="YY"
-											maxLength="2"
-											className="exp"
+											type='text'
+											name='year'
+											inputMode='numeric'
+											placeholder='YY'
+											maxLength='2'
+											className='exp'
 											value={card.year}
 											onChange={handleInputChange}
 											ref={yearInputRef}
 										/>
 									</div>
 								</label>
-								<label htmlFor="cvv" className="cvv">
+								<label htmlFor='cvv' className='cvv'>
 									CVV
 									<input
-										type="password"
-										name="cvv"
-										inputMode="numeric"
-										maxLength="3"
-										placeholder="xxx"
+										type='password'
+										name='cvv'
+										inputMode='numeric'
+										maxLength='3'
+										placeholder='xxx'
 										value={card.cvv}
 										onInput={handleInputChange}
 									/>
 								</label>
 							</div>
 						</div>
-						<div className="confirm">
+						<div className='confirm'>
 							<div>
 								Subtotal: <span>{subtotal}$</span>
 							</div>
@@ -192,14 +192,14 @@ const Cart = () => {
 
 const ModalForm = ({ onClose }) => {
 	return (
-		<div className="modal-backdrop">
-			<div className="modal">
+		<div className='modal-backdrop'>
+			<div className='modal'>
 				<h2>Delivery Data</h2>
-				<form className="contact-form">
-					<InputForm name="country" type="text" label="Country" />
-					<InputForm name="city" type="text" label="City" />
-					<InputForm name="street" type="text" label="Street" />
-					<InputForm name="post_code" type="text" label="Post code" />
+				<form className='contact-form'>
+					<InputForm name='country' type='text' label='Country' />
+					<InputForm name='city' type='text' label='City' />
+					<InputForm name='street' type='text' label='Street' />
+					<InputForm name='post_code' type='text' label='Post code' />
 					<SubmitButton onClick={onClose} />
 				</form>
 			</div>
