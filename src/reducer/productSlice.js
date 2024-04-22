@@ -3,12 +3,22 @@ import { generateImgs } from 'service/generateImages';
 import { fetchModel } from 'actions/shopActions';
 
 const initialState = {
-	product: {},
+	product: {
+		id: null,
+		name: '',
+		price: null,
+	},
 	loading: false,
 	error: null,
 	financingPeriod: 36,
-	selectedColor: '',
-	selectedStorage: '',
+	selectedColor: {
+		id: null,
+		name: '',
+	},
+	selectedStorage: {
+		id: null,
+		capacity: '',
+	},
 	currentImage: '',
 	images: [],
 };
@@ -19,8 +29,8 @@ export const productSlice = createSlice({
 	reducers: {
 		initializeProduct: (state, action) => {
 			const product = action.payload;
-			state.selectedColor = product.colors[0].name;
-			state.selectedStorage = product.storages[0].capacity;
+			state.selectedColor = product.colors[0];
+			state.selectedStorage = product.storages[0];
 			state.price = product.price;
 			state.images = generateImgs(product.name, product.colors[0]);
 			state.currentImage = state.images[0];
@@ -36,8 +46,8 @@ export const productSlice = createSlice({
 		},
 		setStorage: (state, action) => {
 			const { storage } = action.payload;
-			const currentIndex = state.product.storages.findIndex((s) => s.capacity === storage);
-			const previousIndex = state.product.storages.findIndex((s) => s.capacity === state.selectedStorage);
+			const currentIndex = state.product.storages.findIndex((s) => s.capacity === storage.capacity);
+			const previousIndex = state.product.storages.findIndex((s) => s.capacity === state.selectedStorage.capacity);
 			state.selectedStorage = storage;
 			if (currentIndex !== -1 && previousIndex !== -1) {
 				const priceDifference = (currentIndex - previousIndex) * 100;

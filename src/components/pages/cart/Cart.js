@@ -1,6 +1,6 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeItem } from 'reducer/cartSlice';
+import { fetchItems, deleteItem } from 'actions/itemActions';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { Helmet } from 'react-helmet';
 import { FaCcVisa } from 'react-icons/fa';
@@ -8,11 +8,16 @@ import { FaCcMastercard } from 'react-icons/fa';
 
 import './cart.scss';
 import SubmitButton from 'components/submitButton/SubmitButton';
-import InputForm from 'components/form/InputForm';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { generateImg } from 'service/generateImages';
+import { updateUserData } from 'actions/userActions';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
 	const [sortCriteria, setSortCriteria] = useState('price');
 	const cartItems = useSelector((state) => state.cart.items);
+	const { userData } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
 	const [showModal, setShowModal] = useState(false);
 	const [card, setCard] = useState({
@@ -24,7 +29,7 @@ const Cart = () => {
 	});
 	const yearInputRef = useRef(null);
 
-	const subtotal = cartItems.reduce((total, currentItem) => total + currentItem.price, 0);
+	const subtotal = cartItems.reduce((total, currentItem) => +total + +currentItem.product.price, 0);
 
 	const sortedCartItems = useMemo(() => {
 		return [...cartItems].sort((a, b) => {
@@ -36,6 +41,12 @@ const Cart = () => {
 			return 0;
 		});
 	}, [cartItems, sortCriteria]);
+
+	useEffect(() => {
+		setTimeout(() => {
+			dispatch(fetchItems(userData.cart.id));
+		}, 400);
+	}, [dispatch, userData.cart.id]);
 
 	const handleInputChange = (e) => {
 		const { name, value: rawValue } = e.target;
@@ -58,8 +69,9 @@ const Cart = () => {
 		setShowModal(true);
 	};
 
-	const handleRemoveFromCart = (index) => {
-		dispatch(removeItem(index));
+	const handleRemoveFromCart = (id) => {
+		window.location.reload();
+		dispatch(deleteItem(id));
 	};
 
 	const handleSortChange = (e) => {
@@ -90,13 +102,13 @@ const Cart = () => {
 				<div className='cart__items'>
 					{sortedCartItems.map((item, index) => (
 						<div className='item' key={index}>
-							<img src={item.img} alt={item.name} />
-							<h4>{item.name}</h4>
+							<img src={generateImg(item.product.name, item.color.name)} alt={item.product.name} />
+							<h4>{item.product.name}</h4>
 							<h5>
-								Color: {item.color}, Storage: {item.storage}
+								Color: {item.color.name}, Storage: {item.storage.capacity}
 							</h5>
-							<h3>{item.price}$</h3>
-							<button onClick={() => handleRemoveFromCart(index)}>Remove</button>
+							<h3>{item.product.price}$</h3>
+							<button onClick={() => handleRemoveFromCart(item.id)}>Remove</button>
 						</div>
 					))}
 				</div>
@@ -190,18 +202,58 @@ const Cart = () => {
 	);
 };
 
-const ModalForm = ({ onClose }) => {
+const ModalForm = () => {
+	const { userData } = useSelector((state) => state.auth);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const address = userData.address || {
+		country: '',
+		city: '',
+		street: '',
+		postCode: '',
+	};
+
+	const handleSubmit = (values) => {
+		const newData = { ...userData, address: values };
+		dispatch(updateUserData({ data: newData, id: userData.id }));
+		navigate('/');
+	};
+
 	return (
 		<div className='modal-backdrop'>
 			<div className='modal'>
 				<h2>Delivery Data</h2>
-				<form className='contact-form'>
-					<InputForm name='country' type='text' label='Country' />
-					<InputForm name='city' type='text' label='City' />
-					<InputForm name='street' type='text' label='Street' />
-					<InputForm name='post_code' type='text' label='Post code' />
-					<SubmitButton onClick={onClose} />
-				</form>
+				<Formik
+					initialValues={address}
+					onSubmit={handleSubmit}
+					className='contect-form'
+					validationSchema={Yup.object({
+						country: Yup.string().nonNullable(),
+						city: Yup.string().nonNullable(),
+						street: Yup.string().nonNullable(),
+						postCode: Yup.string().nonNullable(),
+					})}
+				>
+					<Form>
+						<div className='form-group'>
+							<label htmlFor='country'>Country: </label>
+							<Field type='text' name='country' />
+						</div>
+						<div className='form-group'>
+							<label htmlFor='city'>City: </label>
+							<Field type='text' name='city' />
+						</div>
+						<div className='form-group'>
+							<label htmlFor='street'>Street: </label>
+							<Field type='text' name='street' />
+						</div>
+						<div className='form-group'>
+							<label htmlFor='postCode'>Post code: </label>
+							<Field type='text' name='postCode' />
+						</div>
+						<SubmitButton />
+					</Form>
+				</Formik>
 			</div>
 		</div>
 	);

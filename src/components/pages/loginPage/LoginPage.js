@@ -56,17 +56,17 @@ const LoginPage = () => {
 			<div className={`main-container ${activeClass}`} id='container'>
 				<div className='form-container sign-up-container'>
 					<LoginForm
-						initialValues={{ name: '', email: '', password: '' }}
+						initialValues={{ username: '', email: '', password: '' }}
 						onSubmit={(values, { resetForm, setSubmitting }) =>
 							handleRegistration(values, { resetForm, setSubmitting })
 						}
 						validationSchema={Yup.object({
-							name: Yup.string()
+							username: Yup.string()
 								.matches(
 									/^[a-zA-Z0-9]{1,20}$/,
-									"Name shouldn't be longer than 20 characters and shouldn't contain special characters"
+									"Username shouldn't be longer than 20 characters and shouldn't contain special characters"
 								)
-								.required('Name is required'),
+								.required('Username is required'),
 							email: Yup.string().email('Invalid email format').required('Email is required'),
 							password: Yup.string()
 								.min(8, 'Password must be at least 8 characters long')

@@ -23,9 +23,9 @@ const Header = () => {
 				<nav className='header__navigation'>
 					<a href='/'>Home</a>
 					<a href='/shop'>Shop</a>
-					<a href='/cart'>Cart</a>
 					{isLoggedIn ? (
 						<>
+							<Link to='/cart'>Cart</Link>
 							<Link to='/settings/profile'>Settings</Link>
 						</>
 					) : (

@@ -3,8 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { initializeProduct, setColor, setStorage, setImage } from 'reducer/productSlice';
-import { addItem } from 'reducer/cartSlice';
 import { fetchModel } from 'actions/shopActions';
+import { sendItem } from 'actions/itemActions';
 
 import './product.scss';
 import { Helmet } from 'react-helmet';
@@ -12,6 +12,7 @@ import { Helmet } from 'react-helmet';
 const Product = () => {
 	const { companyName, id } = useParams();
 	const dispatch = useDispatch();
+	const { userData, isLoggedIn } = useSelector((state) => state.auth);
 	const { product, loading, error, currentImage, images, financingPeriod, selectedColor, selectedStorage } =
 		useSelector((state) => state.product);
 
@@ -49,15 +50,13 @@ const Product = () => {
 	};
 
 	const handleAddToCart = () => {
-		const productItem = {
-			name: product.name,
-			img: images[0],
-			price: product.price,
-			color: selectedColor.name,
-			storage: selectedStorage.storage,
+		const sendItemObj = {
+			cart: userData.cart,
+			product: { id: product.id, name: product.name, price: product.price },
+			color: selectedColor,
+			storage: selectedStorage,
 		};
-
-		dispatch(addItem(productItem));
+		dispatch(sendItem(sendItemObj));
 	};
 
 	return (
@@ -98,9 +97,9 @@ const Product = () => {
 									color &&
 									color.name && (
 										<button
-											className={`color ${selectedColor === color.name ? 'selected' : ''}`}
+											className={`color ${selectedColor.name === color.name ? 'selected' : ''}`}
 											key={color.name}
-											onClick={() => handleColorSelection(color.name)}
+											onClick={() => handleColorSelection(color)}
 										>
 											<span className={color.name}></span>
 											<div>{color.name.charAt(0).toUpperCase() + color.name.slice(1)}</div>
@@ -117,9 +116,9 @@ const Product = () => {
 								space &&
 								space.capacity && (
 									<button
-										className={`storage-space ${selectedStorage === space.capacity ? 'selected' : ''}`}
+										className={`storage-space ${selectedStorage.capacity === space.capacity ? 'selected' : ''}`}
 										key={index}
-										onClick={() => handleStorageSelection(space.capacity)}
+										onClick={() => handleStorageSelection(space)}
 									>
 										{space.capacity}
 									</button>
@@ -131,9 +130,13 @@ const Product = () => {
 					<h5>
 						or ${(product.price / financingPeriod).toFixed(2)} with {financingPeriod}-month financing, before trade-in
 					</h5>
-					<Link to='/cart' onClick={handleAddToCart}>
-						Buy
-					</Link>
+					{isLoggedIn ? (
+						<Link to='/cart' onClick={handleAddToCart}>
+							Buy
+						</Link>
+					) : (
+						<Link to='/login'>Register</Link>
+					)}
 				</div>
 			</div>
 		</div>

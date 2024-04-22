@@ -1,7 +1,14 @@
-import "./submitButton.scss";
+import './submitButton.scss';
+import { useFormikContext } from 'formik';
 
 const SubmitButton = () => {
-    return <button className="submitBtn" type="submit">Save</button>
+	const { dirty } = useFormikContext();
+
+	return (
+		<button className='submitBtn' type='submit' disabled={!dirty}>
+			Save
+		</button>
+	);
 };
 
 export default SubmitButton;

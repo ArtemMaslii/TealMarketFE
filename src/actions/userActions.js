@@ -22,3 +22,13 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (userData, { r
 		}
 	}
 });
+
+export const updateUserData = createAsyncThunk('auth/updateUserData', async ({ data, id }, { rejectWithValue }) => {
+	try {
+		console.log(id, data);
+		const response = await axios.patch(`http://localhost:8080/api/v1/user/${id}`, data);
+		return response.data;
+	} catch (error) {
+		return rejectWithValue(error.response.data);
+	}
+});

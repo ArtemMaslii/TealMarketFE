@@ -9,15 +9,14 @@ import Product from 'components/product/Product';
 import Layout from 'components/app/Layout';
 import Cart from 'components/pages/cart/Cart';
 import Settings from 'components/settingForm/Settings';
-import History from 'components/settingForm/history/History';
 import Profile from 'components/settingForm/profile/Profile';
-import Security from 'components/settingForm/security/Security';
 
 function App() {
 	return (
 		<Router>
 			<Routes>
 				<Route path='/login' element={<LoginPage />} />
+				<Route path='/logout' element={<LoginPage />} />
 				<Route path='/' element={<Layout />}>
 					<Route index element={<MainPage />} />
 					<Route path='shop' element={<Shop />} />
@@ -26,8 +25,6 @@ function App() {
 					<Route path='cart' element={<Cart />} />
 					<Route path='settings' element={<Settings />}>
 						<Route path='profile' element={<Profile />} />
-						<Route path='history' element={<History />} />
-						<Route path='security' element={<Security />} />
 					</Route>
 				</Route>
 				<Route path='*' element={<Page404 />} />

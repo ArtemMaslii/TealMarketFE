@@ -1,47 +1,13 @@
-// import React, { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { fetchBanners } from "actions/bannerActions";
-// import Banner from "components/banner/Banner";
-
-// const MainPage = () => {
-//     const dispatch = useDispatch();
-//     const { banners, loading, error } = useSelector((state) => state.banners);
-
-//     useEffect(() => {
-//       dispatch(fetchBanners());
-//     }, [dispatch]);
-
-//     if (loading) return <div>Loading...</div>;
-//     if (error) return <div>Error: {error}</div>;
-
-//     return (
-//       <>
-//         {banners.map((banner) => (
-//           <Banner
-//             key={banner.id}
-//             deviceType={banner.deviceType}
-//             img={banner.img}
-//             alt={banner.alt}
-//             h2={banner.h2}
-//             h3={banner.h3}
-//           />
-//         ))}
-//       </>
-//     );
-//   };
-
-//   export default MainPage;
-
 import Banner from 'components/banner/Banner';
 import { Helmet } from 'react-helmet';
 
 const MainPage = () => {
 	return (
 		<>
-		<Helmet>
-			<title>Home</title>
-			<meta name='description' content='Home page with banners of Iphone 15 Pro, Galaxy S24 Ultra, and Pixel 8 Pro'/>
-		</Helmet>
+			<Helmet>
+				<title>Home</title>
+				<meta name='description' content='Home page with banners of Iphone 15 Pro, Galaxy S24 Ultra, and Pixel 8 Pro' />
+			</Helmet>
 			<Banner
 				deviceType='samsung'
 				img='https://images-bucket-teal-market.s3.eu-north-1.amazonaws.com/MainPage/MainPageGalaxy.jpg'
