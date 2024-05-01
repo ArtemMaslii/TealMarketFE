@@ -42,7 +42,10 @@ const Product = () => {
 	};
 
 	const handleColorSelection = (color) => {
+		console.log(color);
 		dispatch(setColor({ product, color }));
+		console.log(selectedColor);
+		console.log(images);
 	};
 
 	const handleStorageSelection = (storage) => {

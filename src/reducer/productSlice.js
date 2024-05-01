@@ -32,13 +32,13 @@ export const productSlice = createSlice({
 			state.selectedColor = product.colors[0];
 			state.selectedStorage = product.storages[0];
 			state.price = product.price;
-			state.images = generateImgs(product.name, product.colors[0]);
+			state.images = generateImgs(product.name, state.selectedColor);
 			state.currentImage = state.images[0];
 		},
 		setColor: (state, action) => {
 			const { color } = action.payload;
 			state.selectedColor = color;
-			const colorData = state.product.colors.find((c) => c.name === color);
+			const colorData = state.product.colors.find((c) => c.id === color.id);
 			if (colorData) {
 				state.images = generateImgs(state.product.name, colorData);
 				state.currentImage = state.images[0];

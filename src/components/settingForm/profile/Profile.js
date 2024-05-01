@@ -24,32 +24,34 @@ const Profile = () => {
 
 	return (
 		<div className='profile'>
-			<Formik
-				initialValues={userData}
-				onSubmit={handleSubmit}
-				validationSchema={Yup.object({
-					username: Yup.string()
-						.matches(
-							/^[a-zA-Z0-9]{1,20}$/,
-							"Username shouldn't be longer than 20 characters and shouldn't contain special characters"
-						)
-						.nonNullable(),
-					email: Yup.string().email('Invalid email format').nonNullable(),
-				})}
-			>
-				<Form>
-					<h2>Profile</h2>
-					<div className='form-group'>
-						<label htmlFor='username'>Username</label>
-						<Field type='text' name='username' />
-					</div>
-					<div className='form-group'>
-						<label htmlFor='email'>Email</label>
-						<Field type='email' name='email' />
-					</div>
-					<SubmitButton />
-				</Form>
-			</Formik>
+			<div>
+				<Formik
+					initialValues={userData}
+					onSubmit={handleSubmit}
+					validationSchema={Yup.object({
+						username: Yup.string()
+							.matches(
+								/^[a-zA-Z0-9]{1,20}$/,
+								"Username shouldn't be longer than 20 characters and shouldn't contain special characters"
+							)
+							.nonNullable(),
+						email: Yup.string().email('Invalid email format').nonNullable(),
+					})}
+				>
+					<Form>
+						<h2>Profile</h2>
+						<div className='form-group'>
+							<label htmlFor='username'>Username</label>
+							<Field type='text' name='username' />
+						</div>
+						<div className='form-group'>
+							<label htmlFor='email'>Email</label>
+							<Field type='email' name='email' />
+						</div>
+						<SubmitButton />
+					</Form>
+				</Formik>
+			</div>
 			<div>
 				<h2>Address</h2>
 				<Formik
